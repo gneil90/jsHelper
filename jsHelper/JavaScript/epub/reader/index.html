@@ -1,0 +1,81 @@
+<!DOCTYPE html>
+<html class="no-js">
+    <head>
+
+    <!-- Render -->
+    <script src="epub.min.js"></script>
+    <link rel="stylesheet" href="main.css">
+    <meta name="apple-mobile-web-app-capable" content="yes">
+    
+    <meta name="viewport" content="width=device-width">
+      
+      
+      
+      <!-- Plugins -->
+      <!-- <script src="js/plugins/search.js"></script> -->
+      
+      <!-- Highlights -->
+      <!-- <script src="js/libs/jquery.highlight.js"></script> -->
+      <!-- <script src="js/hooks/extensions/highlight.js"></script> -->
+
+    <script>
+      var book = ePub('moby-dick/');
+    </script>
+
+    </head>
+    <body>
+      <div id="main">
+        <div id="area"></div>
+        
+        <div id="controls">
+          <input id="currentpg" size="3" maxlength="3"/> / <span id="totalpg">0</span>
+        </div>
+        
+        <div id="prev" onclick="book.prevPage();" class="arrow">‹</div>
+        <div id="area"></div>
+        <div id="next" onclick="book.nextPage();" class="arrow">›</div>
+      </div>
+      
+      <script>
+        //var width = $('#read-area').width()
+        var totalPages = document.getElementById("totalpg");
+        var currentPage = document.getElementById("currentpg");
+        console.log("Starting rendering");
+
+        var rendered = book.renderTo('area');//div id
+        var pageList;
+        
+        book.ready.all.then(function() {
+             book.generatePagination();
+        });
+        book.pageListReady.then(function(pageList){
+                                rendered.then(function(){
+                                              var currentLocation = book.getCurrentLocationCfi();
+                                              var currentPage = book.pagination.pageFromCfi(currentLocation);
+                                              console.log(currentPage)
+                                              });
+                                totalPages.innerText = book.pagination.totalPages;
+        });
+
+      </script>
+      
+      <script>
+        EPUBJS.Render.Iframe.prototype.resized = function(e){
+          // Get the fractional height and width of the iframe
+          this.width = parseInt(window.getComputedStyle(document.getElementById('book-reader')).width);
+          this.height = parseInt(window.getComputedStyle(document.getElementById('book-reader')).height);
+        };
+      </script>
+
+      <script>
+        EPUBJS.Renderer.prototype.onResized = function(e) {
+          var width = parseInt(window.getComputedStyle(document.getElementById('book-reader')).width),
+          height = parseInt(window.getComputedStyle(document.getElementById('book-reader')).height);
+    
+          this.resize(width, height, false);
+        };
+      </script>
+
+
+    </body>
+</html>
