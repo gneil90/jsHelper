@@ -14,7 +14,7 @@ class ViewController: UIViewController {
     super.viewDidLoad()
     // Do any additional setup after loading the view, typically from a nib.
     
-    let path = NSBundle.mainBundle().pathForResource("index", ofType: "html", inDirectory: nil)
+    let path = NSBundle.mainBundle().pathForResource("index", ofType: "html", inDirectory: "epub.js-0.3/examples")
     var htmlString:NSString?
     do {
       htmlString = try NSString(contentsOfFile: path!, encoding: NSUTF8StringEncoding)
@@ -23,10 +23,12 @@ class ViewController: UIViewController {
     }
     
     if (htmlString != nil) {
-      let baseURL = NSURL(fileURLWithPath: NSBundle.mainBundle().bundlePath)
+      let bundlePath = NSBundle.mainBundle().bundlePath;
+      let baseURLPath = (path! as NSString).stringByDeletingLastPathComponent;
+      
+      let baseURL = NSURL(fileURLWithPath: baseURLPath)
       webView?.loadHTMLString(htmlString! as String, baseURL: baseURL)
     }
-
   }
 
   override func didReceiveMemoryWarning() {
